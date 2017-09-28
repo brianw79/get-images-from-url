@@ -4,6 +4,8 @@ import urllib2
 import urllib
 import urlparse
 
+import os
+
 
 def get_all_urls_from_http_string(data):
     http_strings = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', data)
@@ -47,19 +49,19 @@ def save_images_from_url(url, save_path):
     url_data = read_url_as_string(url)
     image_urls = get_all_image_urls(url_data)
 
+    if len(image_urls) == 0:
+        return
+
+    if not os.path.isdir(save_path):
+        os.mkdir(save_path)
+
     for image_url in image_urls:
         image_filename = urlparse.urlsplit(image_url).path.split('/')[-1]
         urllib.urlretrieve(image_url, save_path + "\\" + ''.join(image_filename))
 
 
-# urlData = read_url_as_string("https://www.blah.com")
-# all_image_urls = get_all_image_urls(urlData)
-#
-# for img_url in all_image_urls:
-#     print(urlparse.urlsplit(img_url).path.split('/')[-1])
 
-# print(urlparse.urlsplit(image_urls))
 
-url_to_save_images_from = "https://stackshare.io/trending/tools"
-save_path = r"C:\temp\images"
+url_to_save_images_from = "http://www.<replace this>.com"
+save_path = r"C:\temp\blarg"
 save_images_from_url(url_to_save_images_from, save_path)
